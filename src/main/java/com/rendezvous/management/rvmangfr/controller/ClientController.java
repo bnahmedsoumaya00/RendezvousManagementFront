@@ -140,8 +140,8 @@ public class ClientController {
         Client selected = clientTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             TextInputDialog dialog = new TextInputDialog(selected.getName() + "," + selected.getEmail() + "," + selected.getPhone());
-            dialog.setTitle("Edit Client");
-            dialog.setHeaderText("Edit Client (Format: Name,Email,Phone)");
+            dialog.setTitle("Edit Patient");
+            dialog.setHeaderText("Edit Patient (Format: Name,Email,Phone)");
 
             dialog.showAndWait().ifPresent(input -> {
                 String[] parts = input.split(",");

@@ -27,7 +27,7 @@ public class ClientView {
         BorderPane layout = new BorderPane();
 
         // Top Title
-        Label title = new Label("Client Management");
+        Label title = new Label("Patients Management");
         title.setStyle("-fx-font-size: 24px; -fx-text-fill: #007BFF; -fx-padding: 20px;");
         layout.setTop(title);
 
@@ -36,9 +36,9 @@ public class ClientView {
         clientList.setStyle("-fx-control-inner-background: white; -fx-font-size: 14px;");
 
         // Buttons
-        Button addButton = new Button("Add Client");
-        Button editButton = new Button("Edit Client");
-        Button deleteButton = new Button("Delete Client");
+        Button addButton = new Button("Add Patient");
+        Button editButton = new Button("Edit Patient");
+        Button deleteButton = new Button("Delete Patient");
 
         addButton.setStyle("-fx-background-color: #007BFF; -fx-text-fill: white;");
         editButton.setStyle("-fx-background-color: #0056b3; -fx-text-fill: white;");
@@ -63,7 +63,7 @@ public class ClientView {
 
         Scene scene = new Scene(layout, 800, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Client Management");
+        primaryStage.setTitle("Patients Management");
         primaryStage.show();
     }
 }

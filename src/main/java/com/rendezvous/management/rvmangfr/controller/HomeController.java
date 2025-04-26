@@ -8,36 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class HomeController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Label
-        Label titleLabel = new Label("Welcome to Rendezvous Management");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: #1E3A8A;"); // Nice blue
+        // Title
+        Label titleLabel = new Label("Welcome Doctor !");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: #1E3A8A;");
 
         // Buttons
-        Button manageClientsBtn = new Button("Manage Clients");
-        Button manageAppointmentsBtn = new Button("Manage Appointments");
+        Button manageClientsBtn = createStyledButton("Manage Patients");
+        Button manageAppointmentsBtn = createStyledButton("Manage Appointments");
 
-        manageClientsBtn.setStyle("-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-size: 16px;");
-        manageAppointmentsBtn.setStyle("-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-size: 16px;");
-
-        manageClientsBtn.setPrefWidth(200);
-        manageAppointmentsBtn.setPrefWidth(200);
-
-        // Button Actions
-        manageClientsBtn.setOnAction(e -> {
-            try {
-                openClientScreen(primaryStage);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        // Actions
+        manageClientsBtn.setOnAction(e -> openClientScreen(primaryStage));
         manageAppointmentsBtn.setOnAction(e -> openAppointmentScreen(primaryStage));
 
         // Layout
@@ -48,21 +32,34 @@ public class HomeController extends Application {
         // Scene
         Scene scene = new Scene(root, 600, 400);
 
-        primaryStage.setTitle("Home - Rendezvous Management");
+        primaryStage.setTitle("Home - Appointment Management");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    // Navigate to Client Management
-    private void openClientScreen(Stage primaryStage) throws IOException, InterruptedException {
-        ClientController clientController = new ClientController();
-        clientController.start(primaryStage);
+    private Button createStyledButton(String text) {
+        Button button = new Button(text);
+        button.setStyle("-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-size: 16px;");
+        button.setPrefWidth(200);
+        return button;
     }
 
-    // Navigate to Appointment Management
+    private void openClientScreen(Stage primaryStage) {
+        try {
+            ClientController clientController = new ClientController();
+            clientController.start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void openAppointmentScreen(Stage primaryStage) {
-        AppointmentController appointmentController = new AppointmentController();
-        appointmentController.start(primaryStage);
+        try {
+            AppointmentController appointmentController = new AppointmentController();
+            appointmentController.start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

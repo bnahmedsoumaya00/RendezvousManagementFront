@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 public class HomeView {
 
     public void start(Stage stage) {
-        Text title = new Text("Welcome to Rendezvous Manager");
+        Text title = new Text("Welcome Doctor");
         title.setFont(Font.font(24));
         title.setFill(Color.DARKBLUE);
 
-        Button clientButton = new Button("Clients");
+        Button clientButton = new Button("Patients");
         clientButton.setStyle("-fx-background-color: #4682B4; -fx-text-fill: white; -fx-font-size: 14px;");
 
         Button appointmentButton = new Button("Appointments");
