@@ -23,14 +23,14 @@ public class ClientController {
     public void start(Stage stage) throws IOException, InterruptedException {
         this.primaryStage = stage;
         stage.setScene(createClientScene());
-        stage.setTitle("Clients - Rendezvous Management");
+        stage.setTitle("Patients - Appointment Management");
         stage.show();
         loadClients();
     }
 
     private Scene createClientScene() {
         // Title
-        Label titleLabel = new Label("Client Management");
+        Label titleLabel = new Label("Patients Management");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: #1E3A8A;");
 
         // Client Table
@@ -53,7 +53,7 @@ public class ClientController {
 
     private TableView<Client> createClientTable() {
         TableView<Client> table = new TableView<>();
-        table.setPlaceholder(new Label("No clients available"));
+        table.setPlaceholder(new Label("No Patients available"));
 
         TableColumn<Client, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getName()));
@@ -109,8 +109,8 @@ public class ClientController {
     public void handleAddClient() {
         // Example: Open a dialog to add client
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Client");
-        dialog.setHeaderText("Add New Client (Format: Name,Email,Phone)");
+        dialog.setTitle("Add Patients");
+        dialog.setHeaderText("Add New Patient (Format: Name,Email,Phone)");
 
         dialog.showAndWait().ifPresent(input -> {
             String[] parts = input.split(",");
@@ -178,7 +178,7 @@ public class ClientController {
             clientService.deleteClient(selected.getId());
             loadClients();
         } else {
-            showAlert("No Selection", "Please select a client to delete.");
+            showAlert("No Selection", "Please select a patient to delete.");
         }
     }
 

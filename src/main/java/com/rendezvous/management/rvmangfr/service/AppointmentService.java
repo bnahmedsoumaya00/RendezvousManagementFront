@@ -38,4 +38,10 @@ public class AppointmentService {
     public void deleteAppointment(Long id) throws IOException, InterruptedException {
         apiService.delete("/appointments/" + id);
     }
+    public Appointment updateAppointment(Long id, Appointment appointment) throws IOException, InterruptedException {
+        String appointmentJson = objectMapper.writeValueAsString(appointment);
+        String response = apiService.put("/appointments/" + id, appointmentJson);
+        return objectMapper.readValue(response, Appointment.class);
+    }
+
 }

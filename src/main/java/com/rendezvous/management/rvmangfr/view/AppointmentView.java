@@ -41,7 +41,7 @@ public class AppointmentView {
         TableColumn<Appointment, String> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<Appointment, String> clientCol = new TableColumn<>("Client Name");
+        TableColumn<Appointment, String> clientCol = new TableColumn<>("Patient Name");
         clientCol.setCellValueFactory(new PropertyValueFactory<>("clientName"));
 
         table.getColumns().addAll(idCol, descCol, dateCol, clientCol);
