@@ -76,7 +76,7 @@ public class AppointmentController {
 
         TableColumn<Appointment, String> timeCol = new TableColumn<>("Time");
         timeCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
-                data.getValue().getDate() != null ? data.getValue().getTime().toString() : ""
+                data.getValue().getTime() != null ? data.getValue().getTime().toString() : ""
         ));
 
         table.getColumns().addAll(clientCol, dateCol, timeCol);
@@ -130,16 +130,16 @@ public class AppointmentController {
             if (parts.length == 3) {
                 try {
                     Long clientId = Long.parseLong(parts[0].trim());
-                    LocalDate date = LocalDate.parse(parts[1].trim(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    LocalDate date = LocalDate.parse(parts[1].trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     LocalDateTime dateTime = LocalDateTime.parse(parts[2].trim(), DateTimeFormatter.ofPattern(" HH:mm"));
-                    Appointment newAppointment = new Appointment(null,date, dateTime);
-                    appointmentService.addAppointment(newAppointment);
-                    loadAppointments();
+                    Appointment newAppointment = new Appointment(clientId, date, dateTime); // Correct constructor usage
+                    appointmentService.addAppointment(newAppointment); // Assuming this method exists in AppointmentService
+                    loadAppointments(); // Reload appointments after adding
                 } catch (Exception e) {
                     showAlert("Error", "Invalid input format or server error.");
                 }
             } else {
-                showAlert("Invalid Input", "Please provide ClientId and DateTime separated by a comma.");
+                showAlert("Invalid Input", "Please provide ClientId, Date, and Time separated by a comma.");
             }
         });
     }

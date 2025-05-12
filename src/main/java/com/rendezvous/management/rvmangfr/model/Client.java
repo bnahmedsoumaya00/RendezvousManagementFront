@@ -1,33 +1,28 @@
 package com.rendezvous.management.rvmangfr.model;
 
 public class Client {
-
-    private Long id;
+    private Integer id;
     private String name;
     private String email;
     private String phone;
 
-    public Client() {
-    }
-
-    public Client(Long id, String name, String email, String phone) {
+    public Client(Integer id, String name, String email, String phone) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
     }
 
-    // Getters and Setters
-    public Long getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setName(String name) {

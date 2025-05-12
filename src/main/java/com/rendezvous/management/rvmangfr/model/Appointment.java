@@ -1,55 +1,53 @@
 package com.rendezvous.management.rvmangfr.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Appointment {
 
     private Long id;
-    private LocalDate date;
-    private LocalTime time;
-    private Client client;
+    private LocalDate date; // Date of the appointment
+    private LocalDateTime time; // Time of the appointment
 
-    public Appointment() {
-    }
+    // Default constructor
+    public Appointment() {}
 
-    public Appointment(Long id, LocalDate date, LocalTime time, Client client) {
+    // Constructor
+    public Appointment(Long id, LocalDate date, LocalDateTime time) {
         this.id = id;
         this.date = date;
         this.time = time;
-        this.client = client;
     }
 
-    // Getters and Setters
+    @JsonProperty
     public Long getId() {
         return id;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
+    @JsonProperty
     public void setId(Long id) {
         this.id = id;
     }
 
+    @JsonProperty
+    public LocalDate getDate() {
+        return date;
+    }
+
+    @JsonProperty
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
+    @JsonProperty
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    @JsonProperty
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 }

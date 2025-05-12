@@ -19,7 +19,17 @@ public class ClientService {
 
     public List<Client> getAllClients() throws IOException, InterruptedException {
         String response = apiService.get("/clients");
-        return objectMapper.readValue(response, new TypeReference<List<Client>>() {});
+
+        if (response == null || response.isBlank()) {
+            throw new IOException("Received empty response from /api/clients");
+        }
+
+        try {
+            return objectMapper.readValue(response, new TypeReference<List<Client>>() {});
+        } catch (IOException e) {
+            System.err.println("Failed to parse client list from API response: " + e.getMessage());
+            throw new IOException("Error parsing client data", e);
+        }
     }
 
     public Client addClient(Client client) throws IOException, InterruptedException {
@@ -30,11 +40,11 @@ public class ClientService {
 
     public Client updateClient(Client client) throws IOException, InterruptedException {
         String clientJson = objectMapper.writeValueAsString(client);
-        String response = apiService.put("/clients/" + client.getId(), clientJson); // 🛠️ fixed here
+        String response = apiService.put("/clients/" + client.getId(), clientJson); // ID is now Integer
         return objectMapper.readValue(response, Client.class);
     }
 
-    public void deleteClient(Long id) throws IOException, InterruptedException {
+    public void deleteClient(Integer id) throws IOException, InterruptedException {  // ID is now Integer
         apiService.delete("/clients/" + id);
     }
 }

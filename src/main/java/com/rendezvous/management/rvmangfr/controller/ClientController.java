@@ -2,14 +2,15 @@ package com.rendezvous.management.rvmangfr.controller;
 
 import com.rendezvous.management.rvmangfr.model.Client;
 import com.rendezvous.management.rvmangfr.service.ClientService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public class ClientController {
     private Stage primaryStage;
     private final ClientService clientService = new ClientService();
 
-    public void start(Stage stage) throws IOException, InterruptedException {
+    public void start(Stage stage) {
         this.primaryStage = stage;
         stage.setScene(createClientScene());
         stage.setTitle("Patients - Appointment Management");
@@ -29,17 +30,12 @@ public class ClientController {
     }
 
     private Scene createClientScene() {
-        // Title
         Label titleLabel = new Label("Patients Management");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: #1E3A8A;");
 
-        // Client Table
         clientTable = createClientTable();
-
-        // Buttons
         VBox buttonBox = createButtonBox();
 
-        // Layout
         BorderPane root = new BorderPane();
         root.setTop(titleLabel);
         BorderPane.setAlignment(titleLabel, Pos.CENTER);
@@ -80,10 +76,8 @@ public class ClientController {
         deleteButton.setOnAction(e -> {
             try {
                 handleDeleteClient();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
+            } catch (IOException | InterruptedException ex) {
+                showAlert("Error", "Failed to delete client: " + ex.getMessage());
             }
         });
         backButton.setOnAction(e -> navigateBack());
@@ -100,16 +94,28 @@ public class ClientController {
         return button;
     }
 
-    private void loadClients() throws IOException, InterruptedException {
-        clientData = FXCollections.observableArrayList(clientService.getAllClients());
-        clientTable.setItems(clientData);
+    private void loadClients() {
+        Task<ObservableList<Client>> task = new Task<>() {
+            @Override
+            protected ObservableList<Client> call() throws IOException, InterruptedException {
+                return FXCollections.observableArrayList(clientService.getAllClients());
+            }
+        };
+
+        task.setOnSucceeded(e -> clientTable.setItems(task.getValue()));
+
+        task.setOnFailed(e -> {
+            Throwable ex = task.getException();
+            showAlert("Error", "Failed to load clients: " + ex.getMessage());
+            ex.printStackTrace(); // Use logging in production
+        });
+
+        new Thread(task).start();
     }
 
-    // Button Handlers
     public void handleAddClient() {
-        // Example: Open a dialog to add client
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Add Patients");
+        dialog.setTitle("Add Patient");
         dialog.setHeaderText("Add New Patient (Format: Name,Email,Phone)");
 
         dialog.showAndWait().ifPresent(input -> {
@@ -118,17 +124,9 @@ public class ClientController {
                 Client newClient = new Client(null, parts[0].trim(), parts[1].trim(), parts[2].trim());
                 try {
                     clientService.addClient(newClient);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    loadClients(); // refresh table
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    loadClients(); // Refresh table
+                } catch (IOException | InterruptedException e) {
+                    showAlert("Error", "Failed to add client: " + e.getMessage());
                 }
             } else {
                 showAlert("Invalid Input", "Please provide Name, Email, and Phone separated by commas.");
@@ -151,17 +149,9 @@ public class ClientController {
                     selected.setPhone(parts[2].trim());
                     try {
                         clientService.updateClient(selected);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        loadClients(); // refresh
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        loadClients(); // Refresh
+                    } catch (IOException | InterruptedException e) {
+                        showAlert("Error", "Failed to update client: " + e.getMessage());
                     }
                 } else {
                     showAlert("Invalid Input", "Please provide Name, Email, and Phone separated by commas.");
